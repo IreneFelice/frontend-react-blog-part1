@@ -16,6 +16,7 @@
 
 a{
   text-decoration: none;
+  color: #38E991;
 }
 
 ul, ol{
@@ -37,12 +38,6 @@ body {
 
 button, input, select, textarea {
   font-family: inherit;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  margin-block: 0.67em;
 }
 
 h1 {

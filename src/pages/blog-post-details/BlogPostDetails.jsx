@@ -5,7 +5,8 @@ import {useState} from "react";
 import {useEffect} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-
+import Pagewrapper from "../../components/pagewrapper/Pagewrapper.jsx";
+import PageWrapper from "../../components/pagewrapper/Pagewrapper.jsx";
 
 function BlogPostDetails() {
     const [singlePost, setSinglePost] = useState({});
@@ -30,6 +31,7 @@ function BlogPostDetails() {
     }, [id]);
 
 async function handleDelete(){
+    // RESET
     toggleError(false);
     try {
         const response = await axios.delete(`http://localhost:3000/posts/${id}`);
@@ -44,7 +46,7 @@ async function handleDelete(){
 
 
     return (
-        <>
+        <PageWrapper>
             <h1>Postdetails</h1>
 
             {error ? (
@@ -62,7 +64,7 @@ async function handleDelete(){
                 ) : (
                     <p>Aan het laden...</p>
                 )}
-        </>
+        </PageWrapper>
     );
 }
 

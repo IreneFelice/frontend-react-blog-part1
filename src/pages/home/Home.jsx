@@ -1,7 +1,5 @@
-import axios from 'axios';
-import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-
+import Pagewrapper from "../../components/pagewrapper/Pagewrapper.jsx";
 
 function Home() {
 
@@ -82,10 +80,10 @@ function Home() {
     // }
 
     return (
-        <>
+        <Pagewrapper>
             <h1>Welkom hier</h1>
             <h2><Link to={`/blog-overview`}>Bekijk alle blogs</Link></h2>
-        </>
+        </Pagewrapper>
     )
 }
             {/*<button type="button" onClick={findData}>Log alle blogposts</button>*/}

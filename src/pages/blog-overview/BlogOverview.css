@@ -1,4 +1,10 @@
-.blog-overview-container{
-   display: flex;
- flex-direction: column;
+.blog-overview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.blog-overview-container button {
+    background-color: red;
+    color: white;
 }

@@ -1,9 +1,69 @@
 
-.formContainer{
+.formContainer {
     display: flex;
     flex-direction: column;
+    gap: 16px;
+    min-width: 45vw;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px;
+    background-color: #f9f9f9;
+    border: none;
+    border-radius: 8px;
 }
 
-.formInputError{
+label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #333;
+}
+
+input, textarea {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+input:focus, textarea:focus {
+    border-color: #007BFF; /* Blauw bij focus */
+    outline: none; /* Verwijder standaard focus-outline */
+}
+
+textarea {
+    resize: vertical; /* Alleen verticale resize toestaan */
+}
+
+button {
+    min-width: auto;
+    max-width: 300px;
+
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #007BFF; /* Blauwe achtergrond */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #0056b3; /* Donkerder blauw bij hover */
+}
+
+.formInputError {
+    font-size: 14px;
     color: red;
+    margin-top: 4px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: white;
+    font-size: 24px;
 }
