@@ -4,13 +4,14 @@ import formatDate from "../../helpers/formatDate.js";
 import {useState} from "react";
 import {useEffect} from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 
 function BlogPostDetails() {
     const [singlePost, setSinglePost] = useState({});
     const [error, toggleError] = useState(false);
     const {id} = useParams();
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function findSinglePost() {
@@ -21,13 +22,25 @@ function BlogPostDetails() {
                 console.log(response);
                 setSinglePost(response.data);
             } catch (e) {
-                console.error(e)
+                console.error(e);
                 toggleError(true);
             }
         }
-
         findSinglePost();
     }, [id]);
+
+async function handleDelete(){
+    toggleError(false);
+    try {
+        const response = await axios.delete(`http://localhost:3000/posts/${id}`);
+        console.log("succesvol verwijderd");
+        setSinglePost(response.data);
+        navigate("/blog-overview");
+    } catch (e) {
+        console.error(e);
+        toggleError(true);
+    }
+}
 
 
     return (
@@ -44,6 +57,7 @@ function BlogPostDetails() {
                         <p>{singlePost.content}</p>
                         <sub>{singlePost.comments} reacties {singlePost.shares} keer gedeeld</sub>
                         <p><Link to="/blog-overview">Terug naar overzichtspagina</Link></p>
+                        <button type="button" onClick={handleDelete}>Post verwijderen</button>
                     </article>
                 ) : (
                     <p>Aan het laden...</p>

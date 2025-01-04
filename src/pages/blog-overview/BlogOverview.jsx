@@ -26,6 +26,16 @@ function BlogOverview() {
         findPosts();
     }, []);
 
+    async function handleDeleteClick(id){
+        try{
+            const response= await axios.delete(`http://localhost:3000/posts/${id}`);
+            setPosts(posts.filter((post) => post.id !== id));
+            console.log("succesvol verwijderd")
+        } catch(e){
+            console.error("verwijderen niet gelukt")
+        }
+    }
+
     return (
         <>
             <h1>Blog Overview</h1>
@@ -39,6 +49,7 @@ function BlogOverview() {
                 <li key={post.id}>
                     <p><Link to={`/blog-post/${post.id}`}>{post.title}</Link> ({post.author})</p>
                     <p>{post.comments} reacties - {post.shares} keer gedeeld</p>
+                    <button type="button" onClick={() => handleDeleteClick(post.id)}>Verwijder</button>
                 </li>))}</ul>
             }
         </>
