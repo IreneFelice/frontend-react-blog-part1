@@ -2,8 +2,7 @@ import {Link} from "react-router-dom";
 import './BlogOverview.css';
 import axios from 'axios';
 import {useEffect, useState} from "react";
-import Pagewrapper from '/src/components/pagewrapper/Pagewrapper.jsx';
-import PageWrapper from "/src/components/pagewrapper/Pagewrapper.jsx";
+import Pagewrapper from "/src/components/pagewrapper/Pagewrapper.jsx";
 
 function BlogOverview() {
     const [posts, setPosts] = useState([]);
@@ -41,13 +40,14 @@ function BlogOverview() {
     }
 
     return (
-        <PageWrapper>
+        <Pagewrapper>
             <section className="blog-overview-container">
             <h1>Blog Overview</h1>
             {error ? (
                 <>
                 <p>Alles is in de soep gelopen.. Probeer het opnieuw</p>
                 <p><Link to={'/'}>Home</Link></p>
+                    <p><Link to={'/error-page'}>Wat moet ik doen?</Link></p>
                 </>
             ): Object.keys(posts).length > 0 ? (
             <ul>{posts.map((post) => (
@@ -61,7 +61,7 @@ function BlogOverview() {
             )
             }
             </section>
-        </PageWrapper>
+        </Pagewrapper>
     );
 }
 

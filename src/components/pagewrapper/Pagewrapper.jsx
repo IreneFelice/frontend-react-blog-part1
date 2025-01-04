@@ -1,8 +1,8 @@
 import React from 'react';
-import './PageWrapper.css';
+import './Pagewrapper.css';
 
-function PageWrapper({ children }) {
+function Pagewrapper({ children }) {
     return <div className="flex-inner-container">{children}</div>;
 }
 
-export default PageWrapper;
+export default Pagewrapper;

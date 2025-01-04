@@ -4,7 +4,7 @@ function ErrorPage() {
 
     return (
         <Pagewrapper>
-        <p>Er gaat iets heel erg fout!!</p>
+        <p>Ga een goed boek lezen. Klik <a href='https://www.boeken.nl/boeken/top-100'>hier</a> voor inspiratie!  </p>
         </Pagewrapper>
     )
 }

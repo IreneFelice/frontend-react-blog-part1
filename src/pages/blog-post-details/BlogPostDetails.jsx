@@ -6,7 +6,6 @@ import {useEffect} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import Pagewrapper from "../../components/pagewrapper/Pagewrapper.jsx";
-import PageWrapper from "../../components/pagewrapper/Pagewrapper.jsx";
 
 function BlogPostDetails() {
     const [singlePost, setSinglePost] = useState({});
@@ -46,7 +45,7 @@ async function handleDelete(){
 
 
     return (
-        <PageWrapper>
+        <Pagewrapper>
             <h1>Postdetails</h1>
 
             {error ? (
@@ -64,7 +63,7 @@ async function handleDelete(){
                 ) : (
                     <p>Aan het laden...</p>
                 )}
-        </PageWrapper>
+        </Pagewrapper>
     );
 }
 
