@@ -14,11 +14,15 @@ function BlogPostDetails() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const controller = new AbortController();
+
         async function findSinglePost() {
             // RESET
             toggleError(false);
             try {
-                const response = await axios.get(`http://localhost:3000/posts/${id}`);
+                const response = await axios.get(`http://localhost:3000/posts/${id}`, {
+                    signal: controller.signal,
+                });
                 console.log(response);
                 setSinglePost(response.data);
             } catch (e) {
@@ -26,22 +30,27 @@ function BlogPostDetails() {
                 toggleError(true);
             }
         }
+
         findSinglePost();
+
+        return function cleanup() {
+            controller.abort();
+        }
     }, [id]);
 
-async function handleDelete(){
-    // RESET
-    toggleError(false);
-    try {
-        const response = await axios.delete(`http://localhost:3000/posts/${id}`);
-        console.log("succesvol verwijderd");
-        setSinglePost(response.data);
-        navigate("/blog-overview");
-    } catch (e) {
-        console.error(e);
-        toggleError(true);
+    async function handleDelete() {
+        // RESET
+        toggleError(false);
+        try {
+            const response = await axios.delete(`http://localhost:3000/posts/${id}`);
+            console.log("succesvol verwijderd");
+            setSinglePost(response.data);
+            navigate("/blog-overview");
+        } catch (e) {
+            console.error(e);
+            toggleError(true);
+        }
     }
-}
 
 
     return (
@@ -51,18 +60,18 @@ async function handleDelete(){
             {error ? (
                 <p>Helaas pindakaas</p>
             ) : Object.keys(singlePost).length > 0 ? (
-                    <article>
-                        <h2>{singlePost.title}</h2>
-                        <h3>{singlePost.subtitle}</h3>
-                        <p>Geschreven door {singlePost.author} op {formatDate(singlePost.created)}</p>
-                        <p>{singlePost.content}</p>
-                        <sub>{singlePost.comments} reacties {singlePost.shares} keer gedeeld</sub>
-                        <p><Link to="/blog-overview">Terug naar overzichtspagina</Link></p>
-                        <button type="button" onClick={handleDelete}>Post verwijderen</button>
-                    </article>
-                ) : (
-                    <p>Aan het laden...</p>
-                )}
+                <article>
+                    <h2>{singlePost.title}</h2>
+                    <h3>{singlePost.subtitle}</h3>
+                    <p>Geschreven door {singlePost.author} op {formatDate(singlePost.created)}</p>
+                    <p>{singlePost.content}</p>
+                    <sub>{singlePost.comments} reacties {singlePost.shares} keer gedeeld</sub>
+                    <p><Link to="/blog-overview">Terug naar overzichtspagina</Link></p>
+                    <button type="button" onClick={handleDelete}>Post verwijderen</button>
+                </article>
+            ) : (
+                <p>Aan het laden...</p>
+            )}
         </Pagewrapper>
     );
 }
