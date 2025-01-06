@@ -2,44 +2,33 @@ import {useForm} from 'react-hook-form';
 import './BlogPostForm.css';
 import calculateReadTime from "../../helpers/calculateReadTime.js";
 import {useNavigate} from "react-router-dom";
-
-// import {useState} from "react";
+import axios from "axios";
+import './BlogPostForm.css';
+import InputComponent from "../input-component/InputComponent.jsx";
 
 function BlogPostForm() {
-    // const methods = useForm(); // Hier roep je useForm aan
-    // console.log(methods); // Log het object in de console, om te zien welke functionaliteiten deze bevat.
-
-
-// ZONDER USEFORM:
-// const [formState, setFormState] =
-//         useState({
-//             title: "",
-//             subTitle: "",
-//         });
-//
-//     function handleFormChange (e){
-//         console.log(e.target.value);
-//         const changedFieldName = e.target.name;
-//         setFormState({...formState, [changedFieldName]: e.target.value,});
-//     }
-
-    const {register, handleSubmit} = useForm();
+    const {register, handleSubmit, formState: {errors}} = useForm();
     const navigate = useNavigate();
 
+    async function handleFormSubmit(data) {
+        try {
+            const timestamp = new Date().toISOString();
+            const readTime = calculateReadTime(data.content);
 
-    function handleFormSubmit(data) {
-// setFormState({...formState, [changedFieldName]: e.target.value,});
-
-        const dataList = {
-            ...data,
-            created: new Date().toLocaleString(),
-            readTime: calculateReadTime(data.blogcontent),
-            comments: 0,
-            shares: 0,
-            id: 12,
-        };
-        console.log(dataList);
-        navigate("/blog-overview");
+            const response = await axios.post('http://localhost:3000/posts',
+                { ...data,
+                    created: timestamp,
+                    readTime,
+                    comments: "0",
+                    shares: "0"
+                });
+            console.log("blogpost toegevoegd");
+            console.log(response);
+            navigate(`/blog-post/${response.data.id}`);
+        } catch (e) {
+            console.error(e)
+            console.error("Opslaan niet gelukt");
+        }
     }
 
 
@@ -48,15 +37,20 @@ function BlogPostForm() {
             <h2>Maak nieuwe post</h2>
 
             <form onSubmit={handleSubmit(handleFormSubmit)} className="formContainer">
+                <InputComponent/>
                 <label htmlFor="title-field">
                     Titel:
                     <input
                         type="text"
                         id="title-field"
                         {...register("title", {
-                            required: true,
+                            required: {
+                                value: true,
+                                message: "Dit is een verplicht veld",
+                            },
                         })}
                     />
+                    {errors.title && <p className="formInputError">{errors.title.message}</p>}
                 </label>
                 <label htmlFor="subtitle-field">
                     Subtitel:
@@ -64,9 +58,13 @@ function BlogPostForm() {
                         type="text"
                         id="subtitle-field"
                         {...register("subtitle", {
-                            required: true,
+                            required: {
+                                value: true,
+                                message: "Dit is een verplicht veld",
+                            },
                         })}
                     />
+                    {errors.subtitle && <p className="formInputError">{errors.subtitle.message}</p>}
                 </label>
                 <label htmlFor="author-field">
                     Auteur
@@ -74,23 +72,37 @@ function BlogPostForm() {
                         type="text"
                         id="author-field"
                         {...register("author", {
-                            required: true,
+                            required: {
+                                value: true,
+                                message: "Dit is een verplicht veld",
+                            },
                         })}
                     />
+                    {errors.author && <p className="formInputError">{errors.author.message}</p>}
                 </label>
                 <label htmlFor="blog-content">
                     Bericht
                     <textarea
                         id="blog-content"
                         rows="4" cols="20"
-                        {...register("blogcontent", {
-                            required: true,
-                            minLength: 10,
-                            maxLength: 9000,
-                        })}
+                        {...register("content", {
+                            required: {
+                                value: true,
+                                message: "Een blogpost moet minimaal 10 tekens lang zijn",
+                            },
+                                minLength: {
+                                    value: 10,
+                                    message: "Blogpost moet minimaal 10 karakters bevatten",
+                                },
+
+                            maxLength: {
+                                value: 900,
+                                message: "Bogpost mag niet meer dan 900 karakters bevatten",
+                            }})}
                     ></textarea>
+                    {errors.content && <p className="formInputError">{errors.content.message}</p>}
                 </label>
-                <button type="submit">Toevoegen</button>
+                <button type="submit" >Toevoegen</button>
             </form>
         </>
     )

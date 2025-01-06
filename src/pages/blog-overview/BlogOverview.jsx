@@ -1,22 +1,76 @@
-import blogs from '/src/constants/data.json';
 import {Link} from "react-router-dom";
 import './BlogOverview.css';
+import axios from 'axios';
+import {useEffect, useState} from "react";
+import Pagewrapper from "/src/components/pagewrapper/Pagewrapper.jsx";
 
 function BlogOverview() {
-    const totalPosts = blogs.length;
-    const blogList = blogs.map((blog) => (
-        <li key={blog.id}>
-            <p><Link to={`/blog-post/${blog.id}`}>{blog.title}</Link> ({blog.author})</p>
-            <p>{blog.comments} reactie - {blog.shares} keer gedeeld</p>
-        </li>
-    ))
+    const [posts, setPosts] = useState([]);
+    const [error, toggleError] = useState(false);
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        async function findPosts() {
+            // RESET
+            toggleError(false);
+
+            try {
+                const response = await axios.get('http://localhost:3000/posts', {
+                    signal: controller.signal,
+                });
+                console.log(response);
+                setPosts(response.data);
+
+            } catch (e) {
+                console.error(e);
+                toggleError(true);
+            }
+        }
+
+        findPosts();
+
+        return function cleanup() {
+            controller.abort();
+        }
+    }, []);
+
+    async function handleDeleteClick(id) {
+        // RESET
+        toggleError(false);
+        try {
+            const response = await axios.delete(`http://localhost:3000/posts/${id}`);
+            setPosts(posts.filter((post) => post.id !== id));
+            console.log("succesvol verwijderd");
+        } catch (e) {
+            console.error("verwijderen niet gelukt");
+            toggleError(true);
+        }
+    }
 
     return (
-        <div className="blog-overview-container">
-            <h2>Blog Overview</h2>
-            <p>Totale hoeveelheid blogs: {totalPosts}</p>
-            <ul>{blogList}</ul>
-        </div>
+        <Pagewrapper>
+            <section className="blog-overview-container">
+                <h1>Blog Overview</h1>
+                {error ? (
+                    <>
+                        <p>Alles is in de soep gelopen.. Probeer het opnieuw</p>
+                        <p><Link to={'/'}>Home</Link></p>
+                        <p><Link to={'/error-page'}>Wat moet ik doen?</Link></p>
+                    </>
+                ) : Object.keys(posts).length > 0 ? (
+                    <ul>{posts.map((post) => (
+                        <li key={post.id}>
+                            <p><Link to={`/blog-post/${post.id}`}>{post.title}</Link> ({post.author})</p>
+                            <p>{post.comments} reacties - {post.shares} keer gedeeld</p>
+                            <button type="button" onClick={() => handleDeleteClick(post.id)}>X</button>
+                        </li>))}</ul>
+                ) : (
+                    <p>Aan het laden...</p>
+                )
+                }
+            </section>
+        </Pagewrapper>
     );
 }
 

@@ -21,7 +21,7 @@ function App() {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/new-post" element={<NewPost/>}/>
                 <Route path="/blog-overview" element={<BlogOverview/>}/>
-                <Route path="/404-page" element={<ErrorPage/>}/>
+                <Route path="/error-page" element={<ErrorPage/>}/>
                 <Route path="/blog-post/:id" element={<BlogPostDetails/>}/>
             </Routes>
 
