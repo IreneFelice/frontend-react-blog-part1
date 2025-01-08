@@ -10,7 +10,7 @@ function BlogOverview() {
 
     useEffect(() => {
         const controller = new AbortController(); // Voor request annulering
-        const findPosts = async () => {
+        async function findPosts () {
             setError(false); // Reset foutstatus bij elke fetch
 
             try {
@@ -25,7 +25,7 @@ function BlogOverview() {
                         setError(true);
                 }
             }
-        };
+        }
 
         findPosts();
 
@@ -36,14 +36,14 @@ function BlogOverview() {
 
     async function handleDeleteClick(id) {
         // RESET
-        toggleError(false);
+        setError(false);
         try {
             const response = await axios.delete(`http://localhost:3000/posts/${id}`);
             setPosts(posts.filter((post) => post.id !== id));
             console.log("succesvol verwijderd");
         } catch (e) {
             console.error("verwijderen niet gelukt");
-            toggleError(true);
+            setError(true);
         }
     }
 
