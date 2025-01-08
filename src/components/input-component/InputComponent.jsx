@@ -3,7 +3,7 @@ import './InputComponent.css';
 function InputComponent() {
     return (
         <>
-            <p className="test">Test</p>
+            <p className="test"></p>
         </>
     );
 }

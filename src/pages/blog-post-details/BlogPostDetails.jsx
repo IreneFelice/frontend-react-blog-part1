@@ -26,8 +26,10 @@ function BlogPostDetails() {
                 console.log(response);
                 setSinglePost(response.data);
             } catch (e) {
-                console.error(e);
-                toggleError(true);
+                if (e.name !== "CanceledError") {
+                    console.error(e);
+                    toggleError(true);
+                }
             }
         }
 

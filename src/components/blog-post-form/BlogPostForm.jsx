@@ -16,7 +16,8 @@ function BlogPostForm() {
             const readTime = calculateReadTime(data.content);
 
             const response = await axios.post('http://localhost:3000/posts',
-                { ...data,
+                {
+                    ...data,
                     created: timestamp,
                     readTime,
                     comments: "0",
@@ -90,19 +91,20 @@ function BlogPostForm() {
                                 value: true,
                                 message: "Een blogpost moet minimaal 10 tekens lang zijn",
                             },
-                                minLength: {
-                                    value: 10,
-                                    message: "Blogpost moet minimaal 10 karakters bevatten",
-                                },
+                            minLength: {
+                                value: 10,
+                                message: "Blogpost moet minimaal 10 karakters bevatten",
+                            },
 
                             maxLength: {
                                 value: 900,
                                 message: "Bogpost mag niet meer dan 900 karakters bevatten",
-                            }})}
+                            }
+                        })}
                     ></textarea>
                     {errors.content && <p className="formInputError">{errors.content.message}</p>}
                 </label>
-                <button type="submit" >Toevoegen</button>
+                <button type="submit">Toevoegen</button>
             </form>
         </>
     )

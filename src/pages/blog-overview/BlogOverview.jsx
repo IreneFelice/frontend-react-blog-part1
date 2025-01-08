@@ -6,27 +6,26 @@ import Pagewrapper from "/src/components/pagewrapper/Pagewrapper.jsx";
 
 function BlogOverview() {
     const [posts, setPosts] = useState([]);
-    const [error, toggleError] = useState(false);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
-        const controller = new AbortController();
-
-        async function findPosts() {
-            // RESET
-            toggleError(false);
+        const controller = new AbortController(); // Voor request annulering
+        const findPosts = async () => {
+            setError(false); // Reset foutstatus bij elke fetch
 
             try {
-                const response = await axios.get('http://localhost:3000/posts', {
+                const response = await axios.get("http://localhost:3000/posts", {
                     signal: controller.signal,
                 });
-                console.log(response);
-                setPosts(response.data);
-
+                console.log("Response ontvangen:", response);
+                setPosts(response.data); // Data opslaan in state
             } catch (e) {
-                console.error(e);
-                toggleError(true);
+                if (e.name !== "CanceledError") {
+                        console.error("Er is een fout opgetreden:", e);
+                        setError(true);
+                }
             }
-        }
+        };
 
         findPosts();
 
